@@ -1,0 +1,41 @@
+<!-- MAIN VIEW SECTION -->
+<div class="col-md-9 ama-gutter">
+	<div class="row">
+		<div class="ama-gutter" ng-class="{'col-md-12':panel == false,'col-md-10':panel == true}">
+			<div class="panel panel-default ama-panel">
+				<div class="panel-heading" style="overflow: hidden;">
+					<h4 class="panel-title pull-left">APPS View</h4>
+					<button class="btn btn-primary pull-right" ng-click="back()" ng-show="backButton">Back</button>
+				</div>
+				<div class="panel-body" style="height: 480px; overflow: auto;">
+				  	<div ui-view autoscroll="false"></div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-2 ama-gutter"  ng-show="panel">
+			<div class="panel panel-default ama-panel">
+				<div class="panel-heading">
+				<button type="button" ng-click="close()" class="close pull-right" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="panel-title">Application List</h4>
+				</div>
+				<div class="panel-body" style="height: 480px; overflow: auto;" >  <!--   ng-init="callThis()" -->
+				  	<div class="palettezone"  >  
+				  	   <div id="{{menu | lowercase}}"  class="draggable" draggable="true" ng-repeat="menu in customArray" >{{menu}}</div> 
+					</div>
+				</div>
+				<!-- <div class="panel-body" style="height: 480px; overflow: auto;">
+				  	<div class="palettezone">
+						<div id="mch" class="draggable" draggable="true">MCH</div>
+						<div id="epw" class="draggable" draggable="true">EPW</div>
+						<div id="cds" class="draggable" draggable="true">CDS</div>
+						<div id="nga" class="draggable" draggable="true">NGA</div>
+						<div id="ss" class="draggable" draggable="true">SS</div>
+						<div id="qsuper" class="draggable" draggable="true">Qsuper</div>
+					</div>
+				</div> -->
+			</div>
+		</div>
+	</div>
+</div>
+<!-- END OF MAIN VIEW SECTION -->
+<!-- <script src="assets/js/drag-n-drop.js"></script> -->

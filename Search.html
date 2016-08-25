@@ -1,0 +1,43 @@
+	<!-- SEARCH SECTION -->
+	<div ng-controller="SearchCtrl">
+	<div class="row" >
+		<div class="col-md-3 searchbar">
+					<div class="dropdown input-group-btn">
+						  <button style="width:125px;" class="btn btn-default dropdown-toggle " type="button" id="changeText" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+						    App Code
+						    <span class="caret"></span>
+						  </button>
+						 <ul id="dropdown" class="dropdown-menu" aria-labelledby="dropdownMenu1">
+						    <li id="appCode" ng-click="changeAppCode()" style="cursor:pointer;font-size: 16px;padding-left:10px;color:black;">App Code</li>
+							<li id="businessProcess" ng-click="changeBusinessProcess()" style="cursor:pointer;font-size: 16px;padding-left:10px;color:black;">Business Process</li>
+							<li id="businessUnit" ng-click="changeBusinessUnit()" style="cursor:pointer;font-size: 16px;padding-left:10px;color:black;">Business Unit</li>
+							<li id="region" ng-click="changeRegion()" style="cursor:pointer;font-size: 16px;padding-left:10px;color:black;">Region</li>
+						</ul>
+	
+					</div>
+				</div>
+		</div>
+		<div class="row">
+				<input  style="padding: 0px; height: 30px; margin-top: 12px;color:black;margin-left:16px;width:174px"  type="text"  id="input" placeholder="Enter App Code Here...." class="form-control col-md-2"
+							aria-label="..." ng-model="searchBox"   >
+				<!-- 			
+				<input ng-if="selectedSearchValue=='App Code'" type="text" id="input" placeholder="Enter App Code Here...." class="form-control"
+							aria-label="..." ng-model="searchBox"  >
+							
+				<input ng-if="selectedSearchValue=='Business Unit'" id="input" type="text" placeholder="Enter Business Unit Here...." class="form-control"
+							aria-label="..." ng-model="searchBox" > 
+							
+				<input ng-if="selectedSearchValue=='Region'" id="input" type="text" placeholder="Enter Region Here...." class="form-control"
+							aria-label="..." ng-model="searchBox"  > -->
+							
+				<span style="margin-top:12px;"  class="input-group-addon search-this col-md-2" ng-click="showFiltered(searchBox)"><span class="glyphicon glyphicon-search"></span></span>  <!--  ui-sref="Search.ServersInfo" -->
+			</div>
+			<span ng-show="isLoading == true" ></span>
+	</div>
+	</div>
+	
+	<!-- END OF SEARCH SECTION -->
+
+</div>
+
+ 

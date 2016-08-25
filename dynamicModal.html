@@ -1,0 +1,18 @@
+<!-- DYNAMIC MODAL SECTION -->
+<div class="modal-header dynamic-modal-header">
+	<button type="button" class="close" ng-click="cancel()">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<h4 class="modal-title pull-left">MQ List for - {{qmanager}}</h4>
+	<!-- <a href="https://ama-prod.statestr.com/amaview/app/kibana#/dashboard/TRIALC-MQStatsDashboard" target="_blank" class="kibanaIcon pull-right"></a> -->
+</div>
+<!-- <div class="modal-body dynamic-modal-body">
+	
+	
+	
+</div> -->
+<div class="list-group">
+	<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="qnameProgress" />
+	<a href="https://ama-prod.statestr.com/prodamaview/app/kibana#/dashboard/{{appCode | uppercase}}-MQ-Stats-Dashboard?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(filters:!((query:(match:(qname:(query:{{mqlist.host}},type:phrase))))),options:(darkTheme:!t),title:'{{appCode | uppercase}}%20MQ%20Stats%20Dashboard')" target="_blank" class="list-group-item tooltop tooltip-bottom" data-toggle="tooltip" data-placement="bottom" title="{{mqlist.message}}" ng-class="mqlist.SetColorClass" ng-repeat="mqlist in mqnameList | orderBy : 'priority'">{{mqlist.host}}</a>
+</div>
+<!-- END OF DYNAMIC MODAL SECTION -->

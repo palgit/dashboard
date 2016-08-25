@@ -1,0 +1,81 @@
+<!-- MAIN VIEW SECTION -->
+<div class="col-md-12 ama-gutter" ng-controller="ActiveJobCtrl">
+	<div class="panel panel-default ama-panel sla-section">
+		<div class="panel-heading clearfix">
+			<h4 class="panel-title pull-left">SLA {{currentTime}}</h4>
+			<!-- NAV TABS -->
+			<ul class="nav nav-tabs pull-left" role="tablist">
+				<li role="presentation" class="active"><a data-target="#sla-inbound" aria-controls="sla-inbound" role="tab" data-toggle="tab">Inbound</a></li>
+				<li role="presentation"><a data-target="#sla-outbound" aria-controls="sla-outbound" role="tab" data-toggle="tab">Outbound</a></li>
+			</ul>
+			<!-- END OF NAV TABS -->
+			<div class="dropdown pull-right ss-dropdown">
+				<button id="dLabel" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					Sort By: {{slaFilter}}
+					<span class="caret"></span>
+				</button>
+				<ul class="dropdown-menu" aria-labelledby="dLabel">
+					<li ng-class="{'active': slaFilter == 'All'}" ng-click="filterData('All')">All</li>
+					<li role="separator" class="divider"></li>
+					<li ng-class="{'active': slaFilter == 'AppCode'}" ng-click="filterData('AppCode')">AppCode</li>
+				</ul>
+			</div>
+		</div>
+		<div class="panel-body" style="height: auto; max-height:500px; overflow: auto; padding: 0;">
+		
+			<!-- SLA TABBING SECTION -->
+			<div class="sla-tabbing">
+				
+				<!-- TAB PANES -->
+				<div class="tab-content">
+					
+					<!-- SLA INBOUND CONTENT -->
+					<div role="tabpanel" class="tab-pane active" id="sla-inbound">
+						<table class="table table-bordered" style="margin-bottom: 0;" ng-if="activeJobs.length">
+							<thead>
+								<th>Sr. No.</th>
+								<th>Client Name</th>
+								<th>Delivery Name</th>
+								<th>SLA time</th>
+								<th>Status</th>
+							</thead>
+							<tbody>
+								<tr ng-repeat="activeJob in activeJobs | orderBy:'-timeString' track by $index" ng-class="{'futureTime': activeJob.stat == 'lagging'}">
+									<td style="width:4%;">{{$index+1}}</td>
+									<td>{{activeJob.CLIENT_NAME}}</td>
+									<td>{{activeJob.DELIV_NAME}}</td>
+									<td>{{activeJob.SLA_Time | date:"hh:mm a"}}</td>
+									<td>{{activeJob.Delivery_DIRECTION}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<span class="default-text" ng-if="!activeJobs.length">
+					   		 NO ACTIVE JOBS YET!
+					   </span>
+					</div>
+					<!-- END OF SLA INBOUND CONTENT -->
+					
+					<!-- SLA OUTBOUND CONTENT -->
+					<div role="tabpanel" class="tab-pane" id="sla-outbound">
+						This is sla outbound content
+					</div>
+					<!-- END OF SLA OUTBOUND CONTENT -->
+					
+				</div>
+				<!-- END OF TAB PANES -->
+				
+			</div>
+			<!-- END OF SLA TABBING SECTION -->
+		
+		</div>
+	</div>
+</div>
+<!-- END OF MAIN VIEW SECTION -->
+
+<script>
+$(function() {
+	setTimeout(function() {
+		$('.futureTime:first').css('border-top', '3px solid #ff6600');
+	}, 3000);
+});
+</script>

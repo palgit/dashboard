@@ -1,0 +1,43 @@
+<!-- MAIN VIEW SECTION -->
+ <div class="col-md-3 ama-gutter"  >
+	<div class="panel panel-default ama-panel">
+		<div class="panel-heading">
+			<h4 class="panel-title">Latest Alerts</h4>
+		</div>
+		<div class="panel-body tabled" style="height: 480px; max-height: 480px; overflow: auto;">		
+			<table class="table table-bordered"  >
+				<thead>
+					<tr>
+						<th >Time</th>
+						<th >Component</th>
+						<th >Message</th>
+					</tr>					
+				</thead> 
+				<tbody >
+			     <tr class="animate tooltip-right" data-toggle="tooltip" data-placement="bottom" title="{{alerts.alertMessage}}" ng-repeat="alerts in MonitoringAlerts | reverse | limitTo : 200 track by $index" ng-class="{'row-warning': alerts.alertThresholdType == 'Y' , 'row-success': alerts.alertThresholdType == 'G', 'row-danger': alerts.alertThresholdType == 'R' }" highlighter="alerts.payloadData.timestamp">
+			      <td>{{alerts.timestamp | date:"MMM dd, hh:mm a"}}{{alerts.payloadData.timestamp | date:"MMM dd, hh:mm a"}}</td>
+			      <td>{{alerts.payloadData.host}}{{alerts.payloadData.beat.hostname}}{{alerts.payloadDataStr.host}}{{alerts.payloadDataStr.qname}}</td>
+			      <td>{{alerts.alertDescription}}<!-- {{alerts.alertThresholdField}} is having issue --></td>
+			     </tr>
+			    </tbody>
+			</table>  
+			<span style="font-size:14px;font-weight:500;" class="default-text" ng-if="!MonitoringAlerts.length">
+		   		 NO ALERTS YET!
+		   </span>
+			<!-- <table class="table" valign="top">
+				<thead>
+					<tr>
+						<th class="alerts-hostname">Time</th>
+						<th class="alerts-hostname">Component</th>
+						<th class="alerts-message">Message</th>
+					</tr>
+				</thead>
+			</table>
+			<div id="latestBodyScroll" style="overflow: hidden; width: auto;">
+				<table class="table" id="latest" valign="top">
+					<tr id="LAImg"></tr>
+				</table>
+			</div> -->
+		</div>
+	</div>
+</div> 

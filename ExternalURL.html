@@ -1,0 +1,20 @@
+<!-- <div class="clockVis"> 15:00:00 </div> -->
+	<script src="assets/lib/jquery/jquery-1.9.1.js"></script>
+	<script src="assets/lib/bootstrap/bootstrap.min.js"></script>
+
+	<script type="text/javascript" src="assets/lib/angular/angular.js"></script>  
+	<script type="text/javascript" src="assets/lib/angular/angular-animate.min.js"></script>
+<script type="text/javascript" src="app/controllers/ExternalURL.js"></script>
+
+<div class="externalURLVis" ng-app ng-controller="ExternalURLController">
+<label> Please enter URL :-</label> <input type="text" ng-model="externalURL" /><button name="ok">OK </button>
+
+externalURL={{externalURL}}
+<div class="slide-animate-container">
+    <div class="slide-animate" ng-include="externalURL"></div>
+  </div>
+  
+<!-- <ng-include  src="{{externalURL}}"  [onload="string"] [autoscroll="string"]> </ng-include>
+  {{ time | date:'HH:mm:ss' }} -->
+
+  </div>

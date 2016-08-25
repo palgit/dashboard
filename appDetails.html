@@ -1,0 +1,234 @@
+<!-- APP DETAILS SECTION -->
+<div class="row">
+	<!-- INFRASTATS SECTION -->
+	<div class="col-md-6" >
+		<h2 class="section-title">Infra Stats</h2>
+				
+		<!-- ACCORDION SECTION -->
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+			<!-- SERVER FLOW -->
+			<div class="panel panel-default ama-panel inner-panel">
+				<div class="panel-heading" role="tab" id="serverFlowHeading">
+				<span class="signal pull-right" ng-class="(redServerFlag) ? 'danger' : ((amberServerFlag) ? 'warning' : 'success')"></span>
+					<h4 class="panel-title">
+						<a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#serverFlow" href="javascript:;" aria-expanded="true" aria-controls="serverFlow">
+						Server Flow : {{ServerList.length}} Servers
+						</a>
+					</h4>
+				</div><!-- {{RAGData}} -->
+				<div id="serverFlow" class="panel-collapse collapse" role="tabpanel" aria-labelledby="serverFlowHeading">
+					<div class="panel-body">
+						<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="serverProgress" />
+						<ul class="floating-list-group"> 
+							<li ng-repeat="ServerObject in ServerList | orderBy : 'priority'" class="tooltip-right" data-toggle="tooltip" data-placement="bottom" 
+							title="{{ServerObject.message}}" >					
+								<a ng-class="ServerObject.SetColorClass" target="_blank"
+									ng-href="https://ama-prod.statestr.com/prodamaview/app/kibana#/dashboard/{{appCode | uppercase}}-Host-Stats-Dashboard?_g=(time:(from:now-30m,mode:quick,to:now))&_a=(filters:!((query:(match:(shipper:(query:{{ServerObject.host}},type:phrase))))),options:(darkTheme:!t),title:'{{appCode | uppercase}}%20Host%20Stats%20Dashboard')" >
+									<!--setClass(ServerObject.host)  "{'danger': ServerObject.host == 'gdcpc50057' , 'success': ServerObject.host != 'gdcpc50057'}"  {{ServerObject.payloadData.host}} -->
+									{{ServerObject.host}}
+								</a>
+							</li>
+							
+						</ul>
+						<span class="default-text" style="font-weight:bold;" ng-if="!ServerList.length">
+		   					NO SERVERS!!!
+		   				</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- END OF SERVER FLOW -->
+			
+			<!-- MQ FLOW -->
+			<div class="panel panel-default ama-panel inner-panel">
+				<div class="panel-heading" role="tab" id="mqFlowHeading">
+					<h4 class="panel-title">
+					<span class="signal pull-right" ng-class="(redMQFlag) ? 'danger' : ((amberMQFlag) ? 'warning' : 'success')"></span>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#mqFlow" href="javascript:;" aria-expanded="false" aria-controls="mqFlow">
+						MQ Flow : {{MQList.length}} MQ Managers
+						</a>
+					</h4>
+				</div>
+				<div id="mqFlow" class="panel-collapse collapse" role="tabpanel" aria-labelledby="mqFlowHeading">
+					<div class="panel-body">
+						<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="mqProgress" />
+						<ul class="floating-list-group">
+							<li ng-repeat="MQObject in MQList | orderBy : 'priority'" class="tooltip-right" data-toggle="tooltip" data-placement="bottom" 
+							title="{{MQObject.host}}" >
+							<!--setClass(MQObject.host) <a  class="success" target="_blank" href="https://ama-prod.statestr.com/prodamaview/app/kibana#/dashboard/{{appCode | uppercase}}-MQ-Stats-Dashboard?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(filters:!((query:(match:( qname:(query:{{MQObject.host}},type:phrase))))),options:(darkTheme:!t),title:'{{appCode | uppercase}}%20MQ%20Stats%20Dashboard')"> -->
+							<a type="button" ng-class="MQObject.SetColorClass" ng-click="openModal(MQObject.host, appCode)">{{MQObject.host}}</a>
+							
+							</li>							
+						</ul>
+						<span class="default-text" style="font-weight:bold;" ng-if="!MQList.length">
+			   					 NO MQ!!!
+			   				</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- END OF MQ FLOW -->
+			
+			
+			<!-- DB FLOW -->
+			<div class="panel panel-default ama-panel inner-panel">
+				<div class="panel-heading" role="tab" id="dbFlowHeading">
+					<h4 class="panel-title">
+					<span class="signal pull-right" ng-class="(redDBFlag) ? 'danger' : ((amberDBFlag) ? 'warning' : 'success')"></span>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#dbFlow" href="javascript:;" aria-expanded="false" aria-controls="dbFlow">
+						DB Flow : {{DBList.length}} DB Instances
+						</a>
+					</h4>
+				</div>
+				<div id="dbFlow" class="panel-collapse collapse" role="tabpanel" aria-labelledby="dbFlowHeading">
+					<div class="panel-body">
+						<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="dbProgress" />
+						<ul class="floating-list-group">
+							<li ng-repeat="DBObject in DBList | orderBy : 'priority'" class="tooltip-right" data-toggle="tooltip" data-placement="bottom" 
+							title="{{DBObject.payloadData.message}}" >
+							<a  ng-class="DBObject.SetColorClass" target="_blank" href="https://ama-prod.statestr.com/prodamaview/app/kibana#/dashboard/{{appCode | uppercase}}-{{DBObject.host | uppercase}}-Database-Stats-Dashboard?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!t),query:(query_string:(analyze_wildcard:!t,query:'dbUniqueName:{{DBObject.host}}')),title:'{{appCode | uppercase}} %20Database%20Stats%20Dashboard')"><!-- {{DBObject.payloadData.host}} -->{{DBObject.host}}</a>
+							<!-- setClass(DBObject.host) -->
+							</li>							
+						</ul>
+						<span class="default-text" style="font-weight:bold;" ng-if="!DBList.length">
+			   					 NO DB!!!
+			   				</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- END OF DB FLOW -->
+			
+			
+			<!-- WebServer  FLOW -->
+			<div class="panel panel-default ama-panel inner-panel">
+				<div class="panel-heading" role="tab" id="WSFlowHeading">
+					<h4 class="panel-title">
+					<span class="signal pull-right" ng-class="(redWSFlag) ? 'danger' : ((amberWSFlag) ? 'warning' : 'success')"></span>
+						<a role="button" data-toggle="collapse" data-parent="#accordion" data-target="#WebServerFlow" href="javascript:;" aria-expanded="false" aria-controls="dbFlow">
+						WebServer Flow : {{WebServerList.length}} Webservers
+						</a>
+					</h4>
+				</div>
+				<div id="WebServerFlow" class="panel-collapse collapse" role="tabpanel" aria-labelledby="WSFlowHeading">
+					<div class="panel-body">
+						<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="WebServerProgress" />
+						<ul class="floating-list-group">
+							<li ng-repeat="WebServerObject in WebServerList | orderBy : 'priority'" class="tooltip-right" data-toggle="tooltip" data-placement="bottom" 
+							title="{{WebServerObject.payloadData.message}}" >
+							<a  ng-class="WebServerObject.SetColorClass" target="_blank" href="https://ama-prod.statestr.com/prodamaview/app/kibana#/dashboard/{{appCode | uppercase}}-WebServerHealth-Dashboard?_g=(time:(from:now-15m,mode:quick,to:now))&_a=(filters:!(),options:(darkTheme:!t),query:(query_string:(analyze_wildcard:!t,query:'instance:{{WebServerObject.host}}')),title:'{{appCode | uppercase}} %20WebServerHealth%20Dashboard')"><!-- {{WebServerObject.payloadData.host}} -->{{WebServerObject.host}}</a>
+							<!-- setClass(WebServerObject.host) -->
+							</li>							
+						</ul>
+						<span class="default-text" style="font-weight:bold;" ng-if="!WebServerList.length">
+			   					 NO WebServer!!!
+			   				</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- END OF WebServer  -->
+		</div>
+		<!-- END OF ACCORDION SECTION -->
+		
+	</div>
+	<!-- END OF INFRASTATS SECTION -->
+	
+	<!-- SUB APPLICATION SECTION -->
+	<div class="col-md-6">
+		<h2 class="section-title">Application Stats</h2>
+		
+		<!-- ACCORDION SECTION -->
+		<div class="panel-group" id="accordion1" role="tablist" aria-multiselectable="true">
+			<!-- SANITY CHECK FLOW -->
+			<div class="panel panel-default ama-panel inner-panel collapse-standard sanityCheck">
+				<div class="panel-heading" role="tab" id="sanityCheckHeading">
+				<!-- <span class="signal pull-right" ng-class="(redServerFlag) ? 'danger' : ((amberServerFlag) ? 'warning' : 'success')"></span> -->
+					<button class="btn btn-primary pull-right" data-toggle="collapse" data-parent="#accordion1" data-target="#sanityCheckFlow" href="javascript:;" aria-expanded="true" aria-controls="sanityCheckFlow" ng-click="sanityCheck()">Check</button>
+					<h4 class="panel-title">
+						<!-- <a role="button" data-toggle="collapse" data-parent="#accordion1" data-target="#sanityCheckFlow" href="javascript:;" aria-expanded="true" aria-controls="sanityCheckFlow"> -->
+						Sanity Check
+						<!-- </a> -->
+					</h4>
+				</div><!-- {{RAGData}} -->
+				<div class="panel-body" ng-show="!SanityData" style="border-top: 1px solid #ddd; text-align: center;">
+					<a role="button" class="sanity-bts btn btn-success" ng-click="sanityLog('lastRun')">Last Run</a>
+					<a role="button" class="sanity-bts btn btn-warning" ng-click="sanityLog('n1Run')">N-1 Run</a>
+					<a role="button" class="sanity-bts btn btn-warning" ng-click="sanityLog('n2Run')">N-2 Run</a>
+					<!-- <span class="default-text" style="font-weight:bold;")>
+						No Check In Progress!!!
+					</span> -->
+				</div>
+				<div id="sanityCheckFlow" class="panel-collapse collapse " role="tabpanel" aria-labelledby="sanityCheckHeading">
+					<div class="panel-body" style="border-top: 1px solid #ddd;">
+						<img src="assets/images/default.gif" width="50" class="loading-icon" ng-show="sanityProgress" />
+						<button type="button" class="btn btn-primary btn-xs go-back pull-right" ng-click="goBack()"><i class="glyphicon glyphicon-chevron-left"></i> Go Back</button>
+						<table class="table table-bordered sanity-table">
+							<thead>
+								<tr>
+									<th>Sr. No.</th>
+									<th>Type</th>
+									<th>Component</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="SanityObject in SanityAll | orderBy:'status' track by $index">
+									<td>{{$index+1}}<span class="signal pull-right" ng-class="(SanityObject.status=='Alert') ? 'danger' : ((SanityObject.status=='Missing') ? 'missing' : 'success')"></span></td>
+									<td>{{SanityObject.type}}</td>
+									<td>{{SanityObject.host}}</td>
+									<td>{{SanityObject.status}}</td>
+								</tr>
+							</tbody>
+						</table>
+						<button type="button" class="btn btn-primary btn-xs go-back pull-right" ng-click="goBack()"><i class="glyphicon glyphicon-chevron-left"></i> Go Back</button>
+						<span class="default-text" style="font-weight:bold;" ng-show="!SanityAll.length">
+					   		 Sanity Check In Progress!!!
+					   	</span>
+						
+					</div>
+				</div>
+			</div>
+			<!-- END OF SANITY CHECK FLOW -->
+			
+			<!-- BUSINESS FUNDS FLOW -->
+			<div class="panel panel-default ama-panel inner-panel collapse-standard">
+				<div class="panel-heading" role="tab" id="kpiHeading">
+					<h4 class="panel-title">
+					<!-- <span class="signal pull-right" ng-class="(redMQFlag) ? 'danger' : ((amberMQFlag) ? 'warning' : 'success')"></span> -->
+						<a role="button" data-toggle="collapse" data-parent="#accordion1" data-target="#kpiFlow" href="javascript:;" aria-expanded="false" aria-controls="kpiFlow">
+						KPI
+						</a>
+					</h4>
+				</div>
+				<div id="kpiFlow" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="kpiHeading">
+					<div class="panel-body">
+						<ul class="floating-list-group">					
+							<li ng-repeat="FundObject in FundList track by $index" ><a  class="success" href="#">{{FundObject.payloadData.host}}</a></li>							
+							<li class="big-items disabled-item" ng-if="!FundList.length"><a href="#" role="button" class="btn" disabled="disabled">No Funds</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<!-- END OF BUSINESS FUNDS FLOW -->
+		</div>
+		<!-- END OF ACCORDION SECTION -->
+		
+	</div>
+	<!-- END OF SUB APPLICATION SECTION -->
+</div>
+<!-- END OF APP DETAILS SECTION -->
+
+<script>
+$(document).ready(function() {
+	
+	
+	var accordion = $('button[role="accordion"]');
+	
+	accordion.click(function() {
+		var thisParent = $(this).parents('.inner-panel');
+		thisParent.find('.panel-body').toggleClass('collapsed');
+	});
+	
+});
+</script>

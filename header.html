@@ -1,0 +1,113 @@
+<nav class="navbar navbar-inverse navbar-static-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a href="/" class="navbar-brand"><img src="assets/images/ama_logo.png" /></a>
+			<h1 class="navbar-text">Activity Monitoring & Analytics</h1>
+		</div>
+		
+		<div class="counters pull-left">
+			<span class="counters-item"><span class="digi-title">Exceptions:</span><span class="digi">{{exceptions}}</span></span>
+			<span class="counters-item"><span class="digi-title">Alerts:</span><span class="digi">{{alerts}}</span></span>
+		</div>
+		
+		<ul class="nav navbar-nav pull-right">
+		<!-- <li style="color:white;margin-top:13px;font-weight: bold;margin-right:10px;">Select Panel</li>
+		<li style="margin-top:13px">
+			<select ng-model="panels" ng-change="selectValue(panels)">
+				  <option value="{{panel.id}}" ng-repeat="panel in panelList" ng-selected="{{panel.id=='cds'}}">{{panel.name}}</option>
+			</select>
+		</li> -->
+		<li><span style="background-color:red;color:white;"></span></li>
+        <li><span style="background-color:red;color:white;"></span></li>
+		<li class="active"><a href="#"><i class="glyphicon glyphicon-home"></i> <span class="sr-only">(current)</span></a></li>
+        <li><a href="#"><i class="glyphicon glyphicon-bell"></i></a></li>
+        
+       <!--  <li>
+        	<a href="#">
+        		<i class="glyphicon glyphicon-search">
+        	
+        		</i>        	
+        	</a>
+        </li> 
+        <li><a href="#"><i class="glyphicon glyphicon-menu-hamburger"></i></a></li>
+        -->
+	</ul>
+	</div>
+</nav>
+
+
+<!-- SETTINGS PANEL SECTION -->
+<div class="settings-panel">
+	<button type="button" class="settings-panel-pull"><i class="glyphicon glyphicon-cog"></i></button>
+<div class="container-fluid settings-panel-holder" ng-controller="SettingsCtrl">
+	<div class="page-header">
+		<h1>Dashboard <small>Settings Panel</small></h1>
+	</div>
+	<div class="row">
+		
+		<!-- OPTIONS COLUMN SECTION -->
+		<div class="col-sm-4 col-md-4 col-lg-4 options-column">
+			<h4 class="title">Theme Options</h4>
+			<div class="options-item">
+				<h5 class="title">Theme Color</h5>
+				<ul class="color-pallete">
+					<li class="active" data-color="white" ng-click="changeStyle('white')"></li>
+					<li data-color="black" ng-click="changeStyle('black')"></li>
+				</ul>
+			</div>
+		</div>
+		<!-- END OF OPTIONS COLUMN SECTION -->
+		
+		<!-- OPTIONS COLUMN SECTION -->
+		<!-- <div class="col-sm-4 col-md-4 col-lg-4 options-column">
+			<h4 class="title">Sections/Panels Options</h4>
+			<p>This is a sample text...</p>
+		</div> -->
+		<!-- OPTIONS COLUMN SECTION -->    <!--  2nd Option Column section -->
+		<div class="col-sm-4 col-md-4 col-lg-4 options-column">
+			<h4 class="title">Sections/Panels Options</h4>
+			
+			<label>Columns:</label>
+			<!-- <input type="text" id="col" ng-modal="col" style="color:black" > -->
+			<select ng-model="col" id="col" style="color:black">			 
+			 <option value="{{column.id}}" ng-repeat="column in colList" ng-selected="{{column.id=='1'}}" > {{column.name}}</option>
+			</select>
+			
+			<label>Rows:</label>
+			<!-- <input type="text" id="row" ng-modal="row" style="color:black"> -->
+			<select ng-model="row" id="row"  style="color:black">
+			 <option value="{{row.id}}" ng-repeat="row in rowList" ng-selected="{{row.id=='1'}}">{{row.name}}</option>
+			</select>
+			<!-- 
+			<label>Select Panel :</label>
+			<select ng-model="panels" ng-change="selectValue(panels)" style="color:black">
+				
+				<option value="{{panel.id}}" ng-repeat="panel in panelList" >{{panel.name}}</option>
+			</select> -->
+			<button ng-click="submit()" class="btn btn-primary">OK</button>
+		</div>
+		<!-- END OF OPTIONS COLUMN SECTION -->
+		
+		<!-- OPTIONS COLUMN SECTION -->
+		<div class="col-sm-4 col-md-4 col-lg-4 options-column">
+			<h4 class="title">Other Options</h4>
+			<p>This is a sample text...</p>
+		</div>
+		<!-- END OF OPTIONS COLUMN SECTION -->
+
+	</div>
+</div>
+</div>
+<!-- END OF SETTINGS PANEL SECTION -->
+
+<script>
+$(function() {
+	$('.color-pallete li').click(function() {
+		$('.color-pallete li.active').removeClass('active');
+		$(this).addClass('active');
+	});
+	$('.settings-panel-pull').on('click', function() {
+		$('.settings-panel-holder').slideToggle();
+	});
+});
+</script>

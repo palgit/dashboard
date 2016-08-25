@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Basic GoJS Sample</title>
+<meta name="description" content="Interactive GoJS diagram demonstrating creating new nodes and links, reconnecting links, grouping and ungrouping, and context menus and tooltips for nodes, for links, and for the diagram background." />
+<!-- Copyright 1998-2016 by Northwoods Software Corporation. -->
+<meta charset="UTF-8">
+<script src="assets/lib/go/go.js"></script>
+<link href="assets/css/goSamples.css" rel="stylesheet" type="text/css" />  <!-- you don't need to use this -->
+<script src="assets/lib/go/goSamples.js"></script>  <!-- this is only for the GoJS Samples framework -->
+<script id="code">
+function init() {
+    if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
+    var $ = go.GraphObject.make;  // for more concise visual tree definitions
+
+    myDiagram =
+      $(go.Diagram, "myDiagramDiv",
+        {
+          "grid.visible": true,
+          "grid.gridCellSize": new go.Size(30, 20),
+          "draggingTool.isGridSnapEnabled": true,
+          "resizingTool.isGridSnapEnabled": true,
+          "rotatingTool.snapAngleMultiple": 90,
+          "rotatingTool.snapAngleEpsilon": 45,
+          "undoManager.isEnabled": true,
+          initialContentAlignment:go.Spot.Center,
+          initialAutoScale: go.Diagram.UniformToFill,
+        });
+
+    myDiagram.nodeTemplateMap.add("Box",
+    		$(go.Node, "Auto",
+					{ locationSpot: new go.Spot(0.5, 0.5), locationObjectName: "SHAPE",
+				resizable: true, resizeObjectName: "SHAPE", movable: true },
+				new go.Binding("location", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
+				$(go.Shape, "RoundedRectangle",
+					{ name: "SHAPE",cursor: "pointer", width: 50, height: 40, alignment: go.Spot.Center,
+					strokeWidth: 1, stroke: "rgba(0,9,30,0.8)",
+					minSize: new go.Size(65, 40), portId: "", fromSpot: go.Spot.AllSides,
+					toSpot: go.Spot.AllSides },
+					new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+					new go.Binding("fill", "color")
+				), // end of Rounded Rectangle
+				$(go.TextBlock, { alignment: go.Spot.Center, textAlign: "center", margin: 2, editable: true,
+					stroke: "#fff",
+					wrap: go.TextBlock.WrapFit,font: "bold 10pt Calibri" },
+					new go.Binding("text").makeTwoWay()
+				) // end of TextBlock
+			));
+    
+    myDiagram.nodeTemplateMap.add("AutoBox",
+    		$(go.Node, "Auto",
+					{ locationSpot: new go.Spot(0.5, 0.5), locationObjectName: "SHAPE",
+				resizable: true, resizeObjectName: "SHAPE", movable: true },
+				new go.Binding("location", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
+				$(go.Shape, "RoundedRectangle",
+					{ name: "SHAPE",cursor: "pointer", alignment: go.Spot.Center,
+					strokeWidth: 1, stroke: "rgba(0,9,30,0.8)", portId: "", fromSpot: go.Spot.AllSides,
+					toSpot: go.Spot.AllSides },
+					new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify),
+					new go.Binding("fill", "color")
+				), // end of Rounded Rectangle
+				$(go.TextBlock, { alignment: go.Spot.Center, textAlign: "center", margin: 10, editable: true,
+					stroke: "#fff",
+					wrap: go.TextBlock.WrapFit,font: "bold 10pt Calibri" },
+					new go.Binding("text").makeTwoWay()
+				) // end of TextBlock
+			));
+    
+    /* myDiagram.nodeTemplateMap.add("Process",
+      $(go.Node, "Auto",
+        { locationSpot: new go.Spot(0.5, 0.5), locationObjectName: "SHAPE",
+          resizable: true, resizeObjectName: "SHAPE" },
+        new go.Binding("location", "pos", go.Point.parse).makeTwoWay(go.Point.stringify),
+        $(go.Shape, "Cylinder1",
+          { name: "SHAPE",
+            strokeWidth: 2,
+            fill: $(go.Brush, "Linear",
+                    { start: go.Spot.Left, end: go.Spot.Right,
+                      0: "gray", 0.5: "white", 1: "gray" }),
+            minSize: new go.Size(50, 50),
+            portId: "", fromSpot: go.Spot.AllSides, toSpot: go.Spot.AllSides
+          },
+          new go.Binding("desiredSize", "size", go.Size.parse).makeTwoWay(go.Size.stringify)),
+        $(go.TextBlock,
+          { alignment: go.Spot.Center, textAlign: "center", margin: 5,
+            editable: true },
+          new go.Binding("text").makeTwoWay())
+      )); */
+
+      myDiagram.linkTemplate =
+			$(go.Link,
+				{ routing: go.Link.AvoidsNodes, curve: go.Link.JumpGap, corner: 10, reshapable: false,
+				toShortLength: 7 },
+				new go.Binding("points").makeTwoWay(),
+				$(go.Shape, { isPanelMain: true, stroke: "black", strokeWidth: 5 }),
+				$(go.Shape, { isPanelMain: true, stroke: "gray", strokeWidth: 3 }),
+				$(go.Shape, { isPanelMain: true, stroke: "white", strokeWidth: 1, name: "PIPE", strokeDashArray: [10, 10] }),
+				$(go.Shape, { toArrow: "Triangle", fill: "black", stroke: null }),
+		        $(go.TextBlock, { margin: 5, stroke: "#001a66", font: "bold 14px Helvetica" },
+		          new go.Binding("text", "text"))
+		      
+				/*$(go.TextBlock, new go.Binding("text", "text"))*/
+		);
+
+    load();
+
+    loop();  // animate some flow through the pipes
+  }
+
+  function loop() {
+    var diagram = myDiagram;
+    setTimeout(function() {
+      var oldskips = diagram.skipsUndoManager;
+      diagram.skipsUndoManager = true;
+      diagram.links.each(function(link) {
+          var shape = link.findObject("PIPE");
+          var off = shape.strokeDashOffset - 2;
+          shape.strokeDashOffset = (off <= 0) ? 20 : off;
+        });
+      diagram.skipsUndoManager = oldskips;
+      loop();
+    }, 100);
+  }
+
+  function save() {
+    document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    myDiagram.isModified = false;
+  }
+  function load() {
+    myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+  }
+</script>
+</head>
+<body onload="init()">
+<div id="sample">
+  <div id="myDiagramDiv" style="border: solid 1px gray; width:100%; height:500px"></div>
+  This implements a simple SCADA diagram, with animation of the flow along the pipes.
+  <button type="button" onclick="save()">Save</button>
+  <button type="button" onclick="load()">Load</button>
+  <br>
+  <textarea id="mySavedModel" style="width:100%;height:300px">{ "class": "go.GraphLinksModel",
+  "nodeDataArray": [ 
+							{"key":"cftp", "category":"Box", "group":"ais", "text":"Client FTP", "color":"#497200", "pos":"0 -60"},
+							{"key":"sftp", "category":"Box", "group":"ais", "text":"SFTP", "color":"#497200", "pos":"-300 0"},
+							{"key":"imsftp", "category":"Box", "group":"ais", "text":"IMS FTP", "color":"#497200", "pos":"-180 0"},
+							{"key":"rosco", "category":"Box", "group":"ais", "text":"Rosco", "color":"#497200", "pos":"-240 80"},
+							{"key":"tradebatch", "category":"AutoBox", "group":"ais", "text":"TradeBatch", "color":"#497200", "pos":"-240 180"},
+							{"key":"tman", "category":"Box", "group":"AIS", "text":"TMAN", "color":"#497200", "pos":"-240 280"},
+							{"key":"oberon1", "category":"Box", "group":"AIS", "text":"Oberon", "color":"#497200", "pos":"-240 340"},
+							{"key":"rdm", "category":"Box", "group":"AIS", "text":"RDM", "color":"#497200", "pos":"-270 400"},
+							{"key":"rdmc", "category":"Box", "group":"AIS", "text":"RDM Coltran", "color":"#497200", "pos":"-180 400"},
+							{"key":"caliber", "category":"Box", "group":"ais", "text":"Caliber", "color":"#497200", "pos":"-30 320"},
+							{"key":"mercer", "category":"Box", "group":"ais", "text":"Mercer", "color":"#497200", "pos":"-120 160"},
+							{"key":"clientmaint", "category":"AutoBox", "group":"ais", "text":"Client Maint", "color":"#497200", "pos":"-30 160"},
+							{"key":"ssr", "category":"AutoBox", "group":"ais", "text":"SS Routers", "color":"#497200", "pos":"-60 0"},
+							{"key":"mds", "category":"Box", "group":"ais", "text":"MDS", "color":"#497200", "pos":"-60 100"},
+							{"key":"calr", "category":"Box", "group":"ais", "text":"Cal R", "color":"#497200", "pos":"-30 400"},
+							{"key":"ais360", "category":"Box", "group":"ais", "text":"AIS 360", "color":"#497200", "pos":"-30 460"},
+							{"key":"myss", "category":"Box", "group":"ais", "text":"MYSS", "color":"#497200", "pos":"60 460"},
+							{"key":"feeder", "category":"Box", "group":"ais", "text":"Feeder", "color":"#497200", "pos":"90 380"},
+							{"key":"backoffice", "category":"AutoBox", "group":"ais", "text":"BackOffice", "color":"#497200", "pos":"240 380"},
+							{"key":"extracts", "category":"AutoBox", "text":"Extracts Web Exports", "color":"#497200", "pos":"360 340"},
+							{"key":"atcs", "category":"AutoBox", "text":"ATCS", "color":"#497200", "pos":"480 340"},
+							{"key":"gtmgrs", "category":"AutoBox", "text":"GTM/GRS", "color":"#497200", "pos":"480 400"},
+							{"key":"fts", "category":"Box", "group":"ais", "text":"FTS", "color":"#497200", "pos":"360 60"},
+							{"key":"ees", "category":"Box", "group":"ais", "text":"EES", "color":"#497200", "pos":"450 60"},
+							{"key":"mcr", "category":"Box", "group":"aisGroup", "text":"Mercer", "color":"#497200", "pos":"150 0"},
+							{"key":"cum", "category":"Box", "group":"aisGroup", "text":"CUENT MAINT", "color":"#497200", "pos":"240 0"},
+							{"key":"gm2", "category":"Box", "group":"aisGroup", "text":"GM2", "color":"#497200", "pos":"150 60"},
+							{"key":"vdl", "category":"Box", "group":"aisGroup", "text":"VDL", "color":"#497200", "pos":"240 60"},
+							{"key":"dps", "category":"Box", "group":"aisGroup", "text":"DPS", "color":"#497200", "pos":"150 120"},
+							{"key":"oberon", "category":"Box", "group":"aisGroup", "text":"Oberon", "color":"#497200", "pos":"240 120"},
+							{"key":"pm", "category":"Box", "group":"aisGroup", "text":"PM", "color":"#497200", "pos":"150 180"},
+							{"key":"ppl", "category":"Box", "group":"aisGroup", "text":"PPL", "color":"#497200", "pos":"240 180"},
+							{"key":"fxp", "category":"Box", "group":"aisGroup", "text":"FX Pricing", "color":"#497200", "pos":"150 240"},
+							{"key":"cor", "category":"Box", "group":"aisGroup", "text":"Corp Action", "color":"#497200", "pos":"240 240"},
+							{"key":"ctt", "category":"Box", "group":"aisGroup", "text":"CTT", "color":"#497200", "pos":"240 300"},
+							{"key":"aisGroup", "text":"", "isGroup":true, "pos":"100 0", "size":"130 150"}
+						 ],
+  "linkDataArray": [ 
+							{"from":"sftp", "to":"rosco"},
+							{"from":"imsftp", "to":"rosco"},
+							{"from":"rosco", "to":"tradebatch", "text":"SharedFS"},
+							{"from":"tradebatch", "to":"tman", "text":"SonicMQ"},
+							{"from":"tman", "to":"caliber"},
+							{"from":"caliber", "to":"calr", "text":"Replication"},
+							{"from":"caliber", "to":"feeder"},
+							{"from":"caliber", "to":"extracts"},
+							{"from":"feeder", "to":"backoffice"},
+							{"from":"extracts", "to":"fts"},
+							{"from":"ppl", "to":"mds"},
+							{"from":"clientmaint", "to":"caliber"},
+							{"from":"pm", "to":"mds"},
+							{"from":"sftp", "to":"cftp"},
+							{"from":"cftp", "to":"fts"},
+							{"from":"imsftp", "to":"ssr", "text":"other vendors"},
+							{"from":"ssr", "to":"mds"},
+							{"from":"fts", "to":"ees"},
+							{"from":"fxp", "to":"mds"},
+							{"from":"tman", "to":"oberon1", "text":"Swaps"},
+							{"from":"rdm", "to":"rdmc"},
+							{"from":"calr", "to":"ais360"},
+							{"from":"ais360", "to":"myss"},
+							{"from":"extracts", "to":"atcs"},
+							{"from":"atcs", "to":"gtmgrs", "text":"MQ"},
+							{"from":"aisGroup", "to":"caliber"}
+						 ]}
+  </textarea>
+</div>
+</body>
+</html>
