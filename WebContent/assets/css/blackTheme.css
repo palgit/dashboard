@@ -1,0 +1,87 @@
+body {
+	color: #cecece!important;
+	background-color: #1e1b1e!important;
+	/* overflow-x:hidden; */
+}
+
+.ama-panel,
+.modal-content {
+	background-color: #343434;
+	border-color: #5c5c5c;
+}
+
+.ama-panel > .panel-heading,
+.dynamic-modal-header {
+	background-color: #272727;
+    border-color: #5c5c5c;
+    color: #eeeeee;
+}
+
+.ama-panel > .panel-body,
+.dynamic-modal-body {
+	overflow: hidden;
+	/* text-align: center; */
+}
+
+.ama-panel > .tabled {
+	padding: 0;
+	max-height: 400px;
+	overflow: auto;
+	font-size: 15px;
+}
+
+.ama-panel > .tabled table.table {
+	margin: 0;
+}
+
+.ama-panel > .tabled > .table > thead > tr > th,
+.ama-panel > .tabled > .table > thead > tr > td,
+.ama-panel > .tabled > .table > tbody > tr > th,
+.ama-panel > .tabled > .table > tbody > tr > td {
+	vertical-align: middle;
+}
+
+.dynamic-modal-body.tabled > .table > thead > tr {
+	background-color: #272727;
+	color: #fff;
+}
+
+.dynamic-modal-body.tabled > .table > thead > tr > th,
+.dynamic-modal-body.tabled > .table > thead > tr > td,
+.dynamic-modal-body.tabled > .table > tbody > tr > th,
+.dynamic-modal-body.tabled > .table > tbody > tr > td {
+	vertical-align: middle;
+	color: #cecece;
+}
+
+.panel-grayed {	
+	background-color: rgba(255,255,255,.3)!important;
+}
+
+.marquee {
+    background-color: rgba(255,255,255,.1)!important;
+    color: #fff;
+}
+
+.marquee a {
+	color: #fff!important;
+	text-decoration: none;
+}
+
+.marquee a:hover {
+	color: #efefef;
+	text-decoration: none;
+}
+
+.modal-content a.list-group-item {
+    color: #fff;
+}
+
+.modal-content .list-group-item {
+    background-color: #343434;
+    border-color: #5c5c5c;
+}
+
+.curtain {
+	background-color: #343434;
+}
